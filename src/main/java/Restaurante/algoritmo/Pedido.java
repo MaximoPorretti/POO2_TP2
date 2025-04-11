@@ -1,4 +1,4 @@
-package Punto_2.algoritmo;
+package Restaurante.algoritmo;
 
 // Clase Pedido
 public class Pedido {
@@ -14,7 +14,7 @@ public class Pedido {
         return producto.obtenerPrecio() * cantidad;
     }
 
-    public Producto getProducto() {
-        return producto;
+    public String getProductoTipo() {
+        return producto.getTipo();
     }
 }
