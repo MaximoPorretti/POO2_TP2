@@ -39,4 +39,7 @@ public class Participante {
     }
 
 
+    public int getPuntos() {
+        return puntos;
+    }
 }

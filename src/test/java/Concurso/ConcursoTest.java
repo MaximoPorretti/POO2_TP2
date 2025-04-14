@@ -45,20 +45,6 @@ public class ConcursoTest {
         assertTrue(registrador.startWithJDBC("2024-03-13"));
     }
 
-    @Test
-    public void test03fueraDeFecha() {
-        Concurso concurso = new Concurso("Hackathonacho",
-                LocalDate.of(2024, 4, 23),
-                LocalDate.of(2024, 3, 13), registrador);
-
-        Participante paco = new Participante("Paco", 45634673);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            concurso.inscribir(paco, LocalDate.of(2024, 5, 11));
-        });
-
-        assertEquals("La inscripción está fuera de fecha.", exception.getMessage());
-    }
 
     @Test
     public void test04_inscribirVariosParticipantes() {
@@ -98,6 +84,37 @@ public class ConcursoTest {
         assertTrue( registrador.startWithEmail("Hola Maria (DNI: 12345678)"));
     }
 
+    @Test
+    void participanteSeInscribeCorrectamente() {
+        Concurso concurso = new Concurso("Futbol 5", LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 2),registrador);
+        Participante p = new Participante("Ana", 12345678);
+
+        concurso.inscribir(p, LocalDate.of(2025, 4, 3));
+
+        assertEquals(0, p.getPuntos());
+        assertTrue(concurso.getInscriptos().contains(p));
+    }
+
+    @Test
+    void participanteSeInscribeYGanaPuntos() {
+        Concurso concurso = new Concurso("Fiesta de la manzana", LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 1), registrador);
+        Participante p = new Participante("Luis", 87654321);
+
+        concurso.inscribir(p, LocalDate.of(2025, 4, 1));
+
+        assertEquals(10, p.getPuntos());
+    }
+
+    @Test
+    void participanteSeInscribeFueraDeRangoYLanzaExcepcion() {
+        Concurso concurso = new Concurso("Feria del libro", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 10), registrador);
+        Participante p = new Participante("Sofi", 23456789);
+
+        Exception e = assertThrows(RuntimeException.class, () ->
+                concurso.inscribir(p, LocalDate.of(2025, 3, 31)));
+
+        assertEquals("Inscripción fuera del rango permitido", e.getMessage());
+    }
 
 }
 

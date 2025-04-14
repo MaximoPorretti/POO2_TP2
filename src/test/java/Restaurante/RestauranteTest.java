@@ -16,7 +16,7 @@ public class RestauranteTest {
     @Test
     public void testCostoConTarjetaVisa() {
         Menu.agregarProducto(new Producto("Comida","Pizza", 200));
-        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50)); //se agrego new
+        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));
 
         mesa = new Mesa(1, new FakeRegistrador());
         mesa.realizarPedido("Pizza", "Coca-Cola", 2);
@@ -27,7 +27,7 @@ public class RestauranteTest {
     @Test
     public void testCostoConTarjetaMastercard() {
         Menu.agregarProducto(new Producto("Comida","Hamburguesa", 150 ));
-        Menu.agregarProducto(new Producto("Bebida","Agua", 30));//se agrego new
+        Menu.agregarProducto(new Producto("Bebida","Agua", 30));
 
         mesa = new Mesa(6, new FakeRegistrador());
         mesa.realizarPedido("Hamburguesa", "Agua", 1);
@@ -39,8 +39,8 @@ public class RestauranteTest {
     public void testCostoConTarjetaComarcaPlus() {
         Menu.agregarProducto(new Producto("Comida","Pizza", 200));
         Menu.agregarProducto(new Producto("Comida","Hamburguesa", 150));
-        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));//se agrego new
-        Menu.agregarProducto(new Producto("Bebida","Agua", 30));//se agrego new
+        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));
+        Menu.agregarProducto(new Producto("Bebida","Agua", 30));
 
         mesa = new Mesa(1, new FakeRegistrador());
         mesa.realizarPedido("Pizza", "Coca-Cola", 2);
@@ -52,7 +52,7 @@ public class RestauranteTest {
     @Test
     public void testCostoConTarjetaViedma() {
         Menu.agregarProducto(new Producto("Cena","Pizza", 200));
-        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));//se agrego new
+        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));
 
         mesa = new Mesa(1, new FakeRegistrador());
         mesa.realizarPedido("Pizza", "Coca-Cola", 2);
@@ -63,7 +63,7 @@ public class RestauranteTest {
     @Test
     public void testPedidoInvalidoProductoNoExistente() {
         Menu.agregarProducto(new Producto("Cena","Pizza", 200));
-        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));//se agrego new
+        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));
 
         mesa = new Mesa(1, new FakeRegistrador());
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -75,7 +75,7 @@ public class RestauranteTest {
     @Test
     public void testPedidoInvalidoCantidadCero() {
         Menu.agregarProducto(new Producto("Cena","Pizza", 200));
-        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));//se agrego new
+        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));
 
         mesa = new Mesa(1, new FakeRegistrador());
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {

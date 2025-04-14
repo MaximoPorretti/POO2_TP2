@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Concurso implements Registrar{
@@ -34,20 +35,16 @@ public class Concurso implements Registrar{
 
     // Inscribe a un participante si la fecha está dentro del rango
     public void inscribir(Participante participante, LocalDate seInscribio) {
-        if (seInscribio.isAfter(fechaLimite)) {
-            throw new IllegalArgumentException("La inscripción está fuera de fecha.");
+        if (seInscribio.isBefore(fechaInicio) || seInscribio.isAfter(fechaLimite)) {
+            throw new RuntimeException("Inscripción fuera del rango permitido");
         }
-        if (estaInscripto(participante)) {
-            throw new IllegalArgumentException("El participante ya estaba inscripto.");
+        if (seInscribio.equals(fechaInicio)) {
+            participante.sumaPuntos(10);
         }
 
         participantes.add(participante);
         participante.inscribio(this);
 
-        // Otorga 10 puntos si es el primer día
-        if (seInscribio.equals(fechaInicio)) {
-            participante.sumaPuntos(10);
-        }
 
         registrarInscripcion(seInscribio, participante);
         enviarEmail(participante.toString());
@@ -134,6 +131,14 @@ int dni = Integer.parseInt(participante.split(", ")[1]);
 public boolean tienePuntos(Participante participante, int i) {
     return participante.tienePuntos(i);
 }
+
+    public Collection<Object> getInscriptos() {
+        Collection<Object> inscriptos = new ArrayList<>();
+        for (Participante participante : participantes) {
+            inscriptos.add(participante);
+        }
+        return inscriptos;
+    }
 }
 
 
