@@ -2,11 +2,14 @@ package Restaurante.algoritmo;
 
 
 
+
 import TP2.Registrador;
+
+import static java.sql.JDBCType.INTEGER;
 
 public class Main {
     public static void main(String[] args) {
-        // Configurar menú con productos
+ // Configurar menú con productos
         Menu.agregarProducto(new Producto("Comida","Pizza", 400));
         Menu.agregarProducto(new Producto("Comida","Hamburguesa", 250));
         Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));

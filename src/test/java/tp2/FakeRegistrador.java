@@ -19,10 +19,4 @@ public class FakeRegistrador implements Registrar {
     }
 
 
-    //si empieza con "datos" devuelve true sino false
-public boolean startWithTXT(String datos) {return this.contenidoTXT.startsWith(datos);}
-public boolean startWithJDBC(String datos) {
-    return this.contenidoJDBC.startsWith(datos);
-}
-
 }
