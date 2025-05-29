@@ -1,8 +1,8 @@
+package tp2;
 
+import TP2.EmailsService;
 
- package TP2;
-
-    public class FakeMails implements EmailsService {
+public class FakeMails implements EmailsService {
 
         public String enviarEmail(String destinatario, String asunto, String mensaje) {
             System.out.print(destinatario);

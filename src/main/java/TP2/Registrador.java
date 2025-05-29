@@ -1,7 +1,5 @@
 package TP2;
 
-import Concurso.algoritmo.Participante;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,13 +7,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class Registrador implements Registrar{
 
     @Override
-    public void registrarTXT(String datos) {
+    public short registrarTXT(String datos) {
         String rutaArchivo = "inscripciones.txt";
 
         try (FileWriter fw = new FileWriter(rutaArchivo, true);
@@ -29,10 +25,11 @@ public class Registrador implements Registrar{
         } catch (IOException e) {
             System.err.println("Error al registrar la inscripción: " + e.getMessage());
         }
+        return 0;
     }
 
     @Override
-    public void registrarJDBC(String datos) {
+    public short registrarJDBC(String datos) {
         String sql = "INSERT INTO inscripciones (dni, fecha, concurso) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:concurso.db");
@@ -51,6 +48,7 @@ public class Registrador implements Registrar{
         } catch (SQLException e) {
             System.err.println("Error al registrar inscripción: " + e.getMessage());
         }
+        return 0;
     }
 
 }

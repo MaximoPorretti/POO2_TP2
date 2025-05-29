@@ -1,8 +1,8 @@
 package TP2;
 
 public interface Registrar {
-        void registrarTXT(String datos);
-        void registrarJDBC(String datos);
+        short registrarTXT(String datos);
+        short registrarJDBC(String datos);
 
 
 }

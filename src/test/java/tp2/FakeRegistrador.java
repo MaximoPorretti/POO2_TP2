@@ -1,4 +1,6 @@
-package TP2;
+package tp2;
+
+import TP2.Registrar;
 
 public class FakeRegistrador implements Registrar {
 
@@ -6,13 +8,14 @@ public class FakeRegistrador implements Registrar {
     private String contenidoJDBC;
 
     @Override
-    public void registrarTXT(String datos) {
+    public short registrarTXT(String datos) {
         this.contenidoTXT = datos;
+        return 0;
     }
 
     @Override
-    public void registrarJDBC(String datos) {
-        this.contenidoJDBC = datos;
+    public short registrarJDBC(String datos) {this.contenidoJDBC = datos;
+        return 0;
     }
 
 

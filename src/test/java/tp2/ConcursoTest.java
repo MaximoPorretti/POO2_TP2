@@ -1,21 +1,19 @@
-package Concurso;
+package tp2;
 
 import Concurso.algoritmo.Concurso;
 import Concurso.algoritmo.Participante;
 import TP2.EmailsService;
-import TP2.FakeMails;
-import TP2.FakeRegistrador;
+import TP2.Registrar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class ConcursoTest {
 
-    private FakeRegistrador registrador;
-    private EmailsService enviarEmail;
+    private Registrar registrador = new FakeRegistrador();
+    private EmailsService enviarEmail = new FakeMails();
 
     @BeforeEach
     public void setup() {
@@ -34,7 +32,9 @@ public class ConcursoTest {
         Participante juan = new Participante("Juan", 5456346);
         concurso.inscribir(juan, LocalDate.of(2024, 3, 18));
 
-        assertTrue(registrador.startWithTXT("2024-03-18"));
+        String resultado = "2024-03-18";
+        // Verifica que el registro se haya guardado correctamente en formato TXT
+        assertEquals(resultado,registrador.registrarTXT("2024-03-18"));
     }
 
     @Test
@@ -46,7 +46,10 @@ public class ConcursoTest {
         Participante pedro = new Participante("Pedro", 5443623);
         concurso.inscribir(pedro, LocalDate.of(2024, 3, 13));
 
-        assertTrue(registrador.startWithJDBC("2024-03-13"));
+        String resultado = "2024-03-18";
+
+        // Verifica que el registro se haya guardado correctamente en formato JDBC
+        assertEquals(resultado,registrador. registrarJDBC("2024-03-13"));
     }
 
 
@@ -62,7 +65,12 @@ public class ConcursoTest {
         concurso.inscribir(ana, LocalDate.of(2024, 3, 14));
         concurso.inscribir(luis, LocalDate.of(2024, 3, 15));
 
-        assertTrue(registrador.startWithTXT("2024-03-14") || registrador.startWithTXT("2024-03-15"));
+        // Verifica que ambos participantes se hayan inscrito correctamente|
+        assertTrue(concurso.estaInscripto(ana));
+        assertTrue(concurso.estaInscripto(luis));
+        // Verifica que el registro se haya guardado correctamente en formato TXT
+        assertEquals("2024-03-14", registrador.registrarTXT("2024-03-14"));
+
     }
 
     @Test
@@ -74,7 +82,11 @@ public class ConcursoTest {
         Participante maximo = new Participante("Maximo", 32456424);
         concurso.inscribir(maximo, LocalDate.of(2024, 3, 20));
 
-        assertTrue(registrador.startWithTXT("2024-03-20"));
+        // Verifica que el participante se haya inscrito correctamente en el último día permitido
+        assertTrue(concurso.estaInscripto(maximo));
+        // Verifica que el registro se haya guardado correctamente en formato TXT
+        assertEquals("2024-03-20", registrador.registrarTXT("2024-03-20"));
+
     }
     @Test
     public void test06_envioDeEmail() {

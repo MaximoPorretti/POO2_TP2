@@ -4,12 +4,6 @@ import TP2.EmailsService;
 import TP2.EnviarMails;
 import TP2.Registrar;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -60,12 +54,14 @@ public class Pago implements Registrar {
     }
 
 
- public void registrarTXT(String fechaMonto) {
+ public short registrarTXT(String fechaMonto) {
     registro.registrarTXT( fechaMonto);
+     return 0;
  }
 
-    public void registrarJDBC(String fechaMonto) {
+    public short registrarJDBC(String fechaMonto) {
  registro.registrarJDBC(fechaMonto);
+        return 0;
     }
 
 

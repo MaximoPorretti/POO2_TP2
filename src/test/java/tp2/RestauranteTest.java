@@ -1,11 +1,7 @@
-package Restaurante;
+package tp2;
 
-import Concurso.algoritmo.Concurso;
-import Concurso.algoritmo.Participante;
 import Restaurante.algoritmo.*;
-import TP2.FakeRegistrador;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
