@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 // Clase Pago
-public class Pago implements Registrar {
+public class Pago  {
     private int total;
     private String tipoTarjeta;
     private int propina;
@@ -54,14 +54,13 @@ public class Pago implements Registrar {
     }
 
 
- public short registrarTXT(String fechaMonto) {
+ public void registrarTXT(String fechaMonto) {
     registro.registrarTXT( fechaMonto);
-     return 0;
+
  }
 
-    public short registrarJDBC(String fechaMonto) {
+    public void registrarJDBC(String fechaMonto) {
  registro.registrarJDBC(fechaMonto);
-        return 0;
     }
 
 

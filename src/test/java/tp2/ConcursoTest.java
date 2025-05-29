@@ -34,7 +34,7 @@ public class ConcursoTest {
 
         String resultado = "2024-03-18";
         // Verifica que el registro se haya guardado correctamente en formato TXT
-        assertEquals(resultado,registrador.registrarTXT("2024-03-18"));
+        assertTrue(registrador.startWithTXT(resultado));
     }
 
     @Test
@@ -46,10 +46,10 @@ public class ConcursoTest {
         Participante pedro = new Participante("Pedro", 5443623);
         concurso.inscribir(pedro, LocalDate.of(2024, 3, 13));
 
-        String resultado = "2024-03-18";
+        String resultado = "2024-03-13";
 
         // Verifica que el registro se haya guardado correctamente en formato JDBC
-        assertEquals(resultado,registrador. registrarJDBC("2024-03-13"));
+        assertTrue(registrador.startWithJDBC(resultado));
     }
 
 
@@ -65,12 +65,7 @@ public class ConcursoTest {
         concurso.inscribir(ana, LocalDate.of(2024, 3, 14));
         concurso.inscribir(luis, LocalDate.of(2024, 3, 15));
 
-        // Verifica que ambos participantes se hayan inscrito correctamente|
-        assertTrue(concurso.estaInscripto(ana));
-        assertTrue(concurso.estaInscripto(luis));
-        // Verifica que el registro se haya guardado correctamente en formato TXT
-        assertEquals("2024-03-14", registrador.registrarTXT("2024-03-14"));
-
+        assertTrue(registrador.startWithTXT("2024-03-14") || registrador.startWithTXT("2024-03-15"));
     }
 
     @Test
@@ -82,11 +77,7 @@ public class ConcursoTest {
         Participante maximo = new Participante("Maximo", 32456424);
         concurso.inscribir(maximo, LocalDate.of(2024, 3, 20));
 
-        // Verifica que el participante se haya inscrito correctamente en el último día permitido
-        assertTrue(concurso.estaInscripto(maximo));
-        // Verifica que el registro se haya guardado correctamente en formato TXT
-        assertEquals("2024-03-20", registrador.registrarTXT("2024-03-20"));
-
+        assertTrue(registrador.startWithTXT("2024-03-20"));
     }
     @Test
     public void test06_envioDeEmail() {

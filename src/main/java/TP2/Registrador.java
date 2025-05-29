@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class Registrador implements Registrar{
 
     @Override
-    public short registrarTXT(String datos) {
+    public void registrarTXT(String datos) {
         String rutaArchivo = "inscripciones.txt";
 
         try (FileWriter fw = new FileWriter(rutaArchivo, true);
@@ -25,11 +25,11 @@ public class Registrador implements Registrar{
         } catch (IOException e) {
             System.err.println("Error al registrar la inscripción: " + e.getMessage());
         }
-        return 0;
+
     }
 
     @Override
-    public short registrarJDBC(String datos) {
+    public void registrarJDBC(String datos) {
         String sql = "INSERT INTO inscripciones (dni, fecha, concurso) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:concurso.db");
@@ -48,7 +48,16 @@ public class Registrador implements Registrar{
         } catch (SQLException e) {
             System.err.println("Error al registrar inscripción: " + e.getMessage());
         }
-        return 0;
+    }
+
+    @Override
+    public boolean startWithTXT(String datos) {
+        return false;
+    }
+
+    @Override
+    public boolean startWithJDBC(String datos) {
+        return false;
     }
 
 }
