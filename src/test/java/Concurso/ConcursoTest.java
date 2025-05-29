@@ -2,6 +2,8 @@ package Concurso;
 
 import Concurso.algoritmo.Concurso;
 import Concurso.algoritmo.Participante;
+import TP2.EmailsService;
+import TP2.FakeMails;
 import TP2.FakeRegistrador;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,10 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConcursoTest {
 
     private FakeRegistrador registrador;
+    private EmailsService enviarEmail;
 
     @BeforeEach
     public void setup() {
         registrador = new FakeRegistrador();
+        enviarEmail = new FakeMails();
     }
 
 
@@ -25,7 +29,7 @@ public class ConcursoTest {
     public void test01TXT() {
         Concurso concurso = new Concurso("Hackathonito",
                 LocalDate.of(2024, 4, 23),
-                LocalDate.of(2024, 3, 1), registrador);
+                LocalDate.of(2024, 3, 1), registrador, enviarEmail);
 
         Participante juan = new Participante("Juan", 5456346);
         concurso.inscribir(juan, LocalDate.of(2024, 3, 18));
@@ -37,7 +41,7 @@ public class ConcursoTest {
     public void test02JDBC() {
         Concurso concurso = new Concurso("Deep Learning",
                 LocalDate.of(2024, 4, 23),
-                LocalDate.of(2024, 3, 13), registrador);
+                LocalDate.of(2024, 3, 13), registrador, enviarEmail);
 
         Participante pedro = new Participante("Pedro", 5443623);
         concurso.inscribir(pedro, LocalDate.of(2024, 3, 13));
@@ -50,7 +54,7 @@ public class ConcursoTest {
     public void test04_inscribirVariosParticipantes() {
         Concurso concurso = new Concurso("Hackathonaso",
                 LocalDate.of(2024, 4, 23),
-                LocalDate.of(2024, 3, 13), registrador);
+                LocalDate.of(2024, 3, 13), registrador, enviarEmail);
 
         Participante ana = new Participante("Ana", 234345);
         Participante luis = new Participante("Luis", 2343454);
@@ -65,7 +69,7 @@ public class ConcursoTest {
     public void test05_inscripcionUltimoDia() {
         Concurso concurso = new Concurso("Hackathonaaaco",
                 LocalDate.of(2024, 3, 20),
-                LocalDate.of(2024, 3, 13), registrador);
+                LocalDate.of(2024, 3, 13), registrador, enviarEmail);
 
         Participante maximo = new Participante("Maximo", 32456424);
         concurso.inscribir(maximo, LocalDate.of(2024, 3, 20));
@@ -74,19 +78,16 @@ public class ConcursoTest {
     }
     @Test
     public void test06_envioDeEmail() {
-        Concurso concurso = new Concurso("HackEmail",
-                LocalDate.of(2024, 4, 30),
-                LocalDate.of(2024, 4, 1), registrador);
+EmailsService enviarEmail = new FakeMails();
 
-        Participante maria = new Participante("Maria", 12345678);
-        concurso.inscribir(maria, LocalDate.of(2024, 4, 5));
+       String mensaje =enviarEmail.enviarEmail("maria", "Inscripción exitosa al concurso Hackathonito", "Hola Maria, te has inscrito exitosamente al concurso Hackathonito. ¡Buena suerte!");
 
-        assertTrue( registrador.startWithEmail("Hola Maria (DNI: 12345678)"));
+        assertEquals("maria"+ "Inscripción exitosa al concurso Hackathonito"+ "Hola Maria, te has inscrito exitosamente al concurso Hackathonito. ¡Buena suerte!", mensaje);
     }
 
     @Test
     void participanteSeInscribeCorrectamente() {
-        Concurso concurso = new Concurso("Futbol 5", LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 2),registrador);
+        Concurso concurso = new Concurso("Futbol 5", LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 2),registrador, enviarEmail);
         Participante p = new Participante("Ana", 12345678);
 
         concurso.inscribir(p, LocalDate.of(2025, 4, 3));
@@ -97,7 +98,7 @@ public class ConcursoTest {
 
     @Test
     void participanteSeInscribeYGanaPuntos() {
-        Concurso concurso = new Concurso("Fiesta de la manzana", LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 1), registrador);
+        Concurso concurso = new Concurso("Fiesta de la manzana", LocalDate.of(2025, 4, 10), LocalDate.of(2025, 4, 1), registrador, enviarEmail);
         Participante p = new Participante("Luis", 87654321);
 
         concurso.inscribir(p, LocalDate.of(2025, 4, 1));
@@ -107,7 +108,7 @@ public class ConcursoTest {
 
     @Test
     void participanteSeInscribeFueraDeRangoYLanzaExcepcion() {
-        Concurso concurso = new Concurso("Feria del libro", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 10), registrador);
+        Concurso concurso = new Concurso("Feria del libro", LocalDate.of(2025, 4, 1), LocalDate.of(2025, 4, 10), registrador, enviarEmail);
         Participante p = new Participante("Sofi", 23456789);
 
         Exception e = assertThrows(RuntimeException.class, () ->

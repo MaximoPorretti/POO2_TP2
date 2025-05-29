@@ -1,8 +1,8 @@
 package Concurso.algoritmo;
 
 
-
-import TP2.FakeRegistrador;
+import TP2.EnviarMails;
+import TP2.Registrador;
 
 import java.time.LocalDate;
 
@@ -13,7 +13,7 @@ public class Main {
         Concurso concurso = new Concurso("Maratón de Programación",
                 LocalDate.of(2025, 4, 1),  // Fecha límite
                 LocalDate.of(2025, 3, 25), // Fecha de inicio
-                new FakeRegistrador() );
+                new Registrador() , new EnviarMails());
 
 
         Participante participante1 = new Participante("Juan Pérez", 12345678);

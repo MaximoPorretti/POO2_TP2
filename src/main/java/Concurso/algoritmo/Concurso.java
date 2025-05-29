@@ -1,7 +1,7 @@
 package Concurso.algoritmo;
 
+import TP2.EmailsService;
 import TP2.EnviarMails;
-import TP2.FakeRegistrador;
 import TP2.Registrar;
 
 import java.io.FileWriter;
@@ -16,20 +16,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Concurso implements Registrar{
+public class Concurso {
     private String nombre;
     private LocalDate fechaLimite;
     private LocalDate fechaInicio;
     private List<Participante> participantes;
-    private FakeRegistrador registroFake;
+    private Registrar registro;
+    private EmailsService enviarEmail;
 
 
-    public Concurso(String nombre, LocalDate fechaLimite, LocalDate fechaInicio, FakeRegistrador fakeRegistrador) {
+    public Concurso(String nombre, LocalDate fechaLimite, LocalDate fechaInicio, Registrar fakeRegistrador, EmailsService EmailService) {
         this.nombre = nombre;
         this.fechaLimite = fechaLimite;
         this.fechaInicio = fechaInicio;
         this.participantes = new ArrayList<>();
-        this.registroFake = fakeRegistrador;
+        this.registro = fakeRegistrador;
+        this.enviarEmail = EmailService;
 
     }
 
@@ -54,8 +56,8 @@ public class Concurso implements Registrar{
     private void registrarInscripcion(LocalDate fecha, Participante participante) {
 
         String FechaDniConcurso = fecha + "||" + participante.getDni() + "||" + this.nombre;
-        this.registroFake.registrarTXT(FechaDniConcurso);
-     this.registroFake.registrarJDBC(FechaDniConcurso);
+        this.registro.registrarTXT(FechaDniConcurso);
+     this.registro.registrarJDBC(FechaDniConcurso);
     }
 
     public boolean estaInscripto(Participante participante) {
@@ -75,48 +77,30 @@ public class Concurso implements Registrar{
         return this.nombre;
     }
 
-    @Override
-    public void registrarTXT(String participante) {
-        String rutaArchivo = "inscripciones.txt";
+    public boolean tienePuntos(Participante participante, int i) {
+        return participante.tienePuntos(i);
+    }
 
-        try (FileWriter fw = new FileWriter(rutaArchivo, true);
-             PrintWriter pw = new PrintWriter(fw)) {
-
-            String registro = participante;
-
-            pw.println(registro);
-            System.out.println("Inscripción registrada correctamente en el archivo.");
-
-        } catch (IOException e) {
-            System.err.println("Error al registrar la inscripción: " + e.getMessage());
+    public Collection<Object> getInscriptos() {
+        Collection<Object> inscriptos = new ArrayList<>();
+        for (Participante participante : participantes) {
+            inscriptos.add(participante);
         }
+        return inscriptos;
     }
 
-@Override
-public void registrarJDBC(String participante) {
-    String sql = "INSERT INTO inscripciones (dni, fecha, concurso) VALUES (?, ?, ?)";
-
-    try (Connection conn = DriverManager.getConnection("jdbc:sqlite:concurso.db");
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-int dni = Integer.parseInt(participante.split(", ")[1]);
-        String[] datos = participante.split(", ");
-
-        pstmt.setInt(1, Integer.parseInt(datos[1])); // DNI
-        pstmt.setString(2, datos[0]); // Fecha
-        pstmt.setString(3, datos[2]); // Concurso
-
-        pstmt.executeUpdate();
-
-        System.out.println("Inscripción registrada en SQLite.");
-
-    } catch (SQLException e) {
-        System.err.println("Error al registrar inscripción: " + e.getMessage());
+    public void registrarTXT(String participante) {
+      registro.registrarTXT(participante);
     }
-}
 
-@Override
+
+    public void registrarJDBC(String participante) {
+     registro.registrarJDBC(participante);
+    }
+
+
     public void enviarEmail(String nombreParticipante) {
-        EnviarMails enviarMails = new EnviarMails();
+
 
         // Simulamos una dirección de email basada en el nombre
         String email = nombreParticipante.toLowerCase().replace(" ", ".") + "@mailtrap.io";
@@ -125,19 +109,8 @@ int dni = Integer.parseInt(participante.split(", ")[1]);
                 "Te confirmamos que te has inscrito exitosamente al concurso: " + this.nombre +
                 ".\n\n¡Buena suerte!\n\n-- Organización del Concurso";
 
-        String mensajeFake = mensaje + email + ", " + asunto + ", " ;
-        this.registroFake.enviarEmail(mensajeFake);
-    }
-public boolean tienePuntos(Participante participante, int i) {
-    return participante.tienePuntos(i);
-}
-
-    public Collection<Object> getInscriptos() {
-        Collection<Object> inscriptos = new ArrayList<>();
-        for (Participante participante : participantes) {
-            inscriptos.add(participante);
-        }
-        return inscriptos;
+        String mensaje2 = mensaje + email + ", " + asunto + ", " ;
+        enviarEmail.enviarEmail( nombreParticipante , asunto, mensaje);
     }
 }
 

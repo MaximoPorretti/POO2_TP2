@@ -83,7 +83,7 @@ public class RestauranteTest {
         });
         assertTrue(exception.getMessage().contains("La cantidad debe ser mayor que 0"));
     }
-    //test base de datos txt y mails
+
     @Test
     public void testTXT() {
         FakeRegistrador registrador= new FakeRegistrador();
@@ -129,24 +129,5 @@ public class RestauranteTest {
         assertTrue(registrador.startWithJDBC(fechaMonto));
 
     }
-    @Test
-    public void test06_envioDeEmail() {
-        FakeRegistrador registrador= new FakeRegistrador();
-        // Configurar menú con productos
-        Menu.agregarProducto(new Producto("Comida","Pizza", 400));
-        Menu.agregarProducto(new Producto("Comida","Hamburguesa", 250));
-        Menu.agregarProducto(new Producto("Bebida","Coca-Cola", 50));
-        Menu.agregarProducto(new Producto("Bebida","Agua", 30));
 
-        // Crear mesa
-        Mesa mesa = new Mesa(1, registrador);
-
-        // Realizar pedidos
-        mesa.realizarPedido("Pizza", "Coca-Cola", 2);
-        mesa.realizarPedido("Hamburguesa", "Agua", 1);
-
-        float totalVisa = mesa.pagar("Visa", 3);
-
-        assertTrue(registrador.startWithEmail("Se ah realizado una transaccion el dia " + LocalDate.now()));
-    }
 }

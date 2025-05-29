@@ -5,12 +5,12 @@ import jakarta.mail.internet.*;
 
 import java.util.Properties;
 
-public class EnviarMails {
+public class EnviarMails implements EmailsService {
 
     private final String username = "60248342312b89";
     private final String password = "e627a0728766da";
 
-    public void enviarEmail(String destinatario, String asunto, String mensaje) {
+    public String enviarEmail(String destinatario, String asunto, String mensaje) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -39,5 +39,6 @@ public class EnviarMails {
             e.printStackTrace();
             System.err.println("Error email: " + e.getMessage());
         }
+        return destinatario;
     }
 }

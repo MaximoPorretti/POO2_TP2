@@ -1,7 +1,7 @@
 package Restaurante.algoritmo;
 
+import TP2.EmailsService;
 import TP2.EnviarMails;
-import TP2.FakeRegistrador;
 import TP2.Registrar;
 
 import java.io.FileWriter;
@@ -19,25 +19,26 @@ public class Pago implements Registrar {
     private String tipoTarjeta;
     private int propina;
     private List<Pedido> pedidos;
-    private FakeRegistrador registroFake;
+    private Registrar registro;
+    private EmailsService enviarEmail;
 
 
-
-    public Pago(int total, String tipoTarjeta, int propina, List<Pedido> pedidos, FakeRegistrador registroFake) {
+    public Pago(int total, String tipoTarjeta, int propina, List<Pedido> pedidos, Registrar registro , EmailsService enviarEmail) {
         this.total = total;
         this.tipoTarjeta = tipoTarjeta;
         this.propina = propina;
         this.pedidos = pedidos;
-        this.registroFake = registroFake;
+        this.registro = registro;
+        this.enviarEmail = enviarEmail;
     }
 
     public int calcularTotal() {
         int totalPlatos = pedidos.stream()
-                .filter(p -> p.getProductoTipo().equals("Bebida"))
+                .filter(p -> p.TipoDeProducto().equals("Bebida"))
                 .mapToInt(Pedido::obtenerCosto).sum();
 
         int totalBebidas = pedidos.stream()
-                .filter(p -> p.getProductoTipo().equals("Bebida"))
+                .filter(p -> p.TipoDeProducto().equals("Bebida"))
                 .mapToInt(Pedido::obtenerCosto).sum();
 
         int descuento = switch (tipoTarjeta) {
@@ -52,49 +53,22 @@ public class Pago implements Registrar {
         int montoTotal = totalConDescuento + montoPropina;
         String fechaMonto = LocalDate.now() + " || " + montoTotal;
 
-       this.registroFake.registrarTXT(fechaMonto);
-        this.registroFake.registrarJDBC( fechaMonto);
+       this.registro.registrarTXT(fechaMonto);
+        this.registro.registrarJDBC( fechaMonto);
         enviarEmail(fechaMonto);
         return montoTotal;
     }
 
 
-@Override
  public void registrarTXT(String fechaMonto) {
-     String rutaArchivo = "transacciones.txt";
-
-     // Dividir el String en un arreglo
-     String[] datos = fechaMonto.split(", ");
-     String registro = datos[0] + " || $" + datos[1];
-
-     try (FileWriter fw = new FileWriter(rutaArchivo, true)) {
-         fw.write(registro + "\n");
-         System.out.println("Transacción registrada en archivo.");
-     } catch (IOException e) {
-         System.err.println("Error al escribir en archivo: " + e.getMessage());
-     }
+    registro.registrarTXT( fechaMonto);
  }
-    @Override
+
     public void registrarJDBC(String fechaMonto) {
-        LocalDate fecha = LocalDate.now();//fecha de hoy
-
-        String sql = "INSERT INTO transacciones (fecha, monto) VALUES (?, ?)";
-
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:restaurante.db");
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            String[] datos = fechaMonto.split(", ");
-            pstmt.setString(1, datos[0]);
-            pstmt.setInt(2, Integer.parseInt(datos[1])); // Monto total
-            pstmt.executeUpdate();
-
-            System.out.println("Transacción registrada en SQLite.");
-
-        } catch (SQLException e) {
-            System.err.println("Error al registrar transacción: " + e.getMessage());
-        }
+ registro.registrarJDBC(fechaMonto);
     }
 
-    @Override
+
     public void enviarEmail(String datos) {
         EnviarMails enviarMails = new EnviarMails();
 
@@ -106,8 +80,8 @@ public class Pago implements Registrar {
                 "Gracias por su preferencia.\n\n" +
                 "Saludos cordiales,\n" +
                 "El equipo del restaurante";
-String mensajeFake=mensaje+email+asunto;
-        this.registroFake.enviarEmail(mensajeFake);
+
+        enviarMails.enviarEmail( email, asunto, mensaje);
     }
 
 

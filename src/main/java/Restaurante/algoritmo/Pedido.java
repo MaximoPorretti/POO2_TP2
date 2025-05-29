@@ -14,7 +14,7 @@ public class Pedido {
         return producto.obtenerPrecio() * cantidad;
     }
 
-    public String getProductoTipo() {
+    public String TipoDeProducto() {
         return producto.getTipo();
     }
 }

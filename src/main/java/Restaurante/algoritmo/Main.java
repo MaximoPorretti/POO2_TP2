@@ -1,7 +1,8 @@
 package Restaurante.algoritmo;
 
 
-import TP2.FakeRegistrador;
+
+import TP2.Registrador;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,7 +13,7 @@ public class Main {
         Menu.agregarProducto(new Producto("Bebida","Agua", 30));
     
         // Crear mesa
-        Mesa mesa = new Mesa(1, new FakeRegistrador());
+        Mesa mesa = new Mesa(1, new Registrador());
     
         // Realizar pedidos
         mesa.realizarPedido("Pizza", "Coca-Cola", 2);
@@ -20,7 +21,7 @@ public class Main {
     
         // Pagar con diferentes tarjetas
         System.out.println("Los Descuentos de tus tarjetas son: ");
-        FakeRegistrador registrador= new FakeRegistrador();
+        Registrador registrador= new Registrador();
         float totalVisa = mesa.pagar("Visa", 3);
         System.out.println("Total a pagar con Visa (3% propina): $" + totalVisa);
         float totalMastercard = mesa.pagar("Mastercard", 3);
